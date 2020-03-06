@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COME | Leadership Masterclass Registration</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/iofrm-style.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/iofrm-theme24.css">
+</head>
+<body>
+    <div id="disapear" class="form-body on-top">
+        <div class="website-logo">
+                <div class="logo">
+                    <!-- <img class="logo-size" src="/static/images/logo-come-round.png" alt=""> -->
+                </div>
+            </a>
+        </div>
+        <div class="row">
+            <div style="display:none;text-align:center;margin-top:50%;" id="loading" class="col-lg-6 col-md-12">
+                <p>Loading...</p>
+            </div>
+            <div class="img-holder">
+                <div class="bg"></div>
+                <div class="info-holder simple-info">
+                    <div><img src="/static/images/round_logo_come.png" alt=""></div>
+                    <div><h3>LEADERSHIP MASTERCLASS</h3></div>
+                    <div><p>Fill the form bellow to register for our upcoming Leadership Masterclass.</p></div>
+                </div>
+            </div>
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items">
+                        <form action="#" method="dialog" id="registrationform">
+                            <!--{%csrf_token%}-->
+                            {% if messages %}
+                            {% for message in messages %}
+                            <span style="color:red;">{{message}}</span>
+                            {%endfor%}
+                            {%endif%}
+
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control" name="firstname" placeholder="First name" required>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control" name="lastname" placeholder="Last name" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <input type="email" class="form-control" name="email" placeholder="E-mail Address" required>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="tel" class="form-control" name="phone" placeholder="Phone Number">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control" name="country" placeholder="Country" required>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control" name="status" placeholder="Relationship Status">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control" name="professionalstatus" placeholder="Professional Status (Student or Working)">
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <input type="text" class="form-control" name="institution" placeholder="Institution (School/Workplace Name)">
+                                </div>
+                            </div>
+                            <div class="row" style="padding-bottom: 15px;">
+                                <div class="col-12 selection">
+                                    <select name="interest" class="form-control" id="interest" required>
+                                        <option value="" disabled selected>Area of Interest</option>
+                                        <option value="Purpose Discovery">Purpose Discovery</option>
+                                        <option value=" Developing a 20 year plan"> Developing a 20 year plan</option>
+                                        <option value="Leadership training">Leadership training</option>
+                                        <option value="Public speaking">Public speaking</option>
+                                        <option value="Entrepreneurship">Entrepreneurship</option>
+                                        <option value="Preaching Tips">Preaching Tips</option>
+                                        <option value="Premarital Counselling">Premarital Counselling</option>
+                                        <option value="Organizational management">Organizational management</option>
+                                        <option value="Strategies on planning effective outreach">Strategies on planning effective outreach</option>
+                                        <option value="Health Reforms">Health Reforms</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <textarea class="form-control" name="expectation" placeholder="What are your expectations on the Leadership & Mentorship Masterclass?"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row top-padding">
+                                <div class="col-12 col-sm-6">
+                                    <input type="checkbox" id="chk1" required><label for="chk1">I agree on <a href="#">terms & conditions</a> of COME</label>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-button text-right">
+                                        <a type="submit" onclick="save()" class="ibtn less-padding"><span class="btn-title">Register Now</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+    function save(){
+        var registrationform = document.getElementById("registrationform")
+        var info = regisForm("registrationform")
+        // const object1 = {...info }
+        registrationform.style.display="none"
+        var loading = document.getElementById("loading")
+        var disapear = document.getElementById("disapear")
+        disapear.style.display="none"
+        loading.style.display="block"
+        myapi(info)
+        console.log(info)
+    }
+
+    function regisForm(formId){
+        let myForm = document.getElementById(formId);
+        let formData = new FormData(myForm);
+        var saved = []
+        const info = {};
+
+        // Building the form from name, value pairs
+        for(var pair of formData.entries()){
+            info[pair[0]] = pair[1]
+        }
+        return info;
+    }
+
+    function myapi(mydata){
+        var url = "http://127.0.0.1:8000/registrationapi/"
+        const http = new XMLHttpRequest();
+                http.open('POST', url);
+                http.setRequestHeader('Content-type', 'application/json');
+                http.send(JSON.stringify(mydata));
+                http.onload = function() {
+            var resp =http.responseText;
+            var json_resp = JSON.parse(resp)
+            var loading = document.getElementById("loading")
+            console.log(json_resp["message"])
+            loading.innerHTML = "<p>"+json_resp["message"]+"</p>"
+            window.location.href = "https://comecenters.com"
+            }
+    }
+
+</script>
+
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/main.js"></script>
+</body>
+
+
+</html>
